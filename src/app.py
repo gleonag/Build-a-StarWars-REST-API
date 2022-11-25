@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, People
+from models import db, User, People, Planets, Vehicles
 #from models import Person
 
 app = Flask(__name__)
@@ -72,6 +72,67 @@ def handle_people():
         all_people = list(map(lambda x: x.serialize(), all_people))
         responde_body = all_people
         return jsonify(response_body), 200
+
+@app.route('/planets', methods=['GET', 'POST'])
+def handle_planets():
+
+    if request.body == 'POST':
+        body = reques.get.json()
+        planets = Planets(
+            name = body['name'],
+            rotation_perior = body['rotation_perior'],
+            orbital_perior = body['orbital_perior'],
+            diameter = body['diameter'],
+            climate = body['climate'],
+            gravity = body['gravity'],
+            terrain = body['terrain'],
+            surface_water = body['surface_water'],
+            population = body['population']
+        )
+        db.session.add(planets)
+        db.session.commit()
+        responde_body = {
+            "msg": "Planet added correctly"
+        }
+        return jsonify(responde_body), 200
+
+        if request.method == 'GET':
+            all_planets = Planets.query.all()
+            all_planets = list(map(lambda x: xserialize(), all_planets))
+            response_body = all_planets 
+            return jsonify(responde_body), 200
+
+
+@app.route('/vehicles', methods=['GET', 'POST'])
+def handle_vehicles():
+
+    if request.body == 'POST':
+        body = request.get.json()
+        vehicles = Vehicles(
+            name = body['name'],
+            model = body['model'],
+            manufacturer = body['manufacturer'],
+            cost_in_credits = body['cost_in_credits'],
+            lenght = body['lenght'],
+            max_atmosphering_speed = body['max_atmosphering_speed'],
+            crew = body['crew'],
+            passenger = body['passenger'],
+            cargo_capacity = body['cargo_capacity'],
+            consumables = body['consumables'],
+            vehicles_class = body['vehicles_class']
+        )
+        db.session.add(vehicles)
+        db.session.commit()
+        responde.body = {
+            "msg": "Vehicles addes correctly!"
+        }
+        return jsonify(response_body), 200
+
+    if request.body == 'GET':
+        all_vehicles = vehicles.querry.all()
+        all_vehicles = list(map(lambda x: x.serialize(), all_vehicles))
+        return jsonify(responde_body), 200
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
