@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, People, Planets, Vehicles
+from models import db, User, People, Planets, Vehicles, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -133,6 +133,36 @@ def handle_vehicles():
         all_vehicles = list(map(lambda x: x.serialize(), all_vehicles))
         return jsonify(responde_body), 200
 
+@app.route('/species', methods=['GET', 'POST'])
+def handle_species():
+
+    if request.body == 'POST':
+        body = repuest.get.json()
+        species = Species(
+            name = body['name'],
+            classification = body['classification'],
+            designation = body['designation'],
+            average_height = body['average_height'],
+            skin_color = body['skin_color'],
+            hair_colors = body['hair_colors'],
+            eye_colos = body['eye_colors'],
+            average = body['average']
+        )
+
+        db.session.add(species)
+        db.session.commit()
+        response_body = {
+            "msg": "Species addes correctly!!"
+        }
+    
+    return jsonify(request.body), 200
+
+    if request.method == 'GET':
+        all_species = Species.query.all()
+        all_species = list(map(lambda x: x.serialize(), all_species))
+        responde_body = all_species
+        return jsonify(responde_body), 200
+        
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

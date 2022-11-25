@@ -1,8 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
@@ -55,21 +57,21 @@ class People(db.Model):
 
             # do not serialize the password, its a security breach
 
-class Planets(db.models):
+class Planets(db.Model):
     __tablename__= 'planets'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
-    rotation_perior = db.Column(db.Integer, unique=false, nullable=False)
+    rotation_perior = db.Column(db.Integer, unique=False, nullable=False)
     orbital_perior = db.Column(db.Integer, unique=False, nullable=False)
-    diameter = db.Column(db.Integer, unique=True, nullable=False)
-    climate = db.Column(db.Integer, unique=True, nullable=False)
-    gravity = db.Column(db.String(50), unique=True, nullable=False)
-    terrain = db.Column(db.String(50), unique=True, nullable=False)
-    surface_water = db.Column(db.Integer, unique=True, nullable=False)
-    population= db.Column(db.Integer, unique=True, nullable=False)
+    diameter = db.Column(db.Integer, unique=False, nullable=False)
+    climate = db.Column(db.Integer, unique=False, nullable=False)
+    gravity = db.Column(db.String(50), unique=False, nullable=False)
+    terrain = db.Column(db.String(50), unique=False, nullable=False)
+    surface_water = db.Column(db.Integer, unique=False, nullable=False)
+    population= db.Column(db.Integer, unique=False, nullable=False)
     # aqui van residentes enlaces id de people y films
 
-class Vehicles(db.models):
+class Vehicles(db.Model):
     __tablename__= 'vehicles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=False, nullable=False)
@@ -84,9 +86,9 @@ class Vehicles(db.models):
     consumables = db.Column(db.Integer, unique=False, nullable=False)
     vehicles_class = db.Column(db.String(50), unique=False, nullable=False)
     
-class Species(db.models):
+class Species(db.Model):
     __tablename__ = 'species'
-    id = db.Column(db.Integer, primary_key=False)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=False, nullable=False)
     classification = db.Column(db.String(120), unique=True, nullable=False)
     designation = db.Column(db.String(50),unique=False, nullable=False)
@@ -95,4 +97,12 @@ class Species(db.models):
     hair_colors = db.Column(db.String(50), unique=False, nullable=False)
     eye_colors = db.Column(db.String(50), unique=False, nullable=False)
     average = db.Column(db.Integer, unique=False, nullable=False)
-    homeworld = db.Column(db.url_map, unique=False, nullable=False)
+    # homeworld = db.Column(db.url_map, unique=False, nullable=False)
+
+class Favorites(db.Model):
+    __tablename__ = 'favorites'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, ForeignKey('user.id'))
+    planet_id = db.Column(db.Integer, ForeignKey('planets.id'))
+    people_id = db.Column(db.Integer, ForeignKey('peoples.id'))
+    species_id = db.Column(db.Integer, ForeignKey('species.id'))
