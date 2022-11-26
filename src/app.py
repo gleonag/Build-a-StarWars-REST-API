@@ -10,6 +10,11 @@ from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User, People, Planets, Vehicles, Favorites
 #from models import Person
+import requests
+
+r = requests.get('https://google.com')
+
+print("RESULT", r.json())
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
